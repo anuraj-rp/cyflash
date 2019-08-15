@@ -241,11 +241,11 @@ def seek_permission(argument, message):
 
 
 class BootloaderHost(object):
-    def __init__(self, session, args, out):
+    def __init__(self, session, out, *, fwkey=None, chunk_size=DEFAULT_CHUNKSIZE, dual_app=False):
         self.session = session
-        self.key = args.key
-        self.chunk_size = args.chunk_size
-        self.dual_app = args.dual_app
+        self.key = fwkey
+        self.chunk_size = chunk_size
+        self.dual_app = dual_app
         self.out = out
         self.row_ranges = {}
 
@@ -383,7 +383,7 @@ def main():
         t0 = time.clock()
     data = cyacd.BootloaderData.read(args.image)
     session = make_session(args, data.checksum_type)
-    bl = BootloaderHost(session, args, sys.stdout)
+    bl = BootloaderHost(session, sys.stdout)
     try:
         bl.bootload(
             data,
